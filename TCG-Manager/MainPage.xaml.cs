@@ -26,7 +26,7 @@ namespace TCG_Manager
 
             //initalise and populate the grid here to make sure all of the columns are on screen
             //and no spill of the window
-            //NOTE: could be used to dynamicly resize the gris on size change
+            //NOTE: could be used to dynamicly resize the grid on size change
             if (initalised == false)
             {
                 GridWidth = new GridLength(width / COLUMN_COUNT);
@@ -43,6 +43,9 @@ namespace TCG_Manager
             PopulateGrid();
         }
 
+        /// <summary>
+        /// Initalizes the grid with the correct amount of row and column definitions
+        /// </summary>
         public void InitalizeGrid()
         {
             MainGrid.Children.Clear();
@@ -73,36 +76,16 @@ namespace TCG_Manager
             {
                 MainGrid.RowDefinitions.Add(new RowDefinition(GridHeight));
             }
-
-
-            foreach (var row in MainGrid.RowDefinitions)
-            {
-                int rowNum = MainGrid.RowDefinitions.IndexOf(row);
-                foreach (var col in MainGrid.ColumnDefinitions)
-                {
-                    int colNum = MainGrid.ColumnDefinitions.IndexOf(col);
-
-                    Rectangle r = new Rectangle();
-                    if ((colNum + rowNum) % 2 == 0)
-                    {
-                        r.Background = Color.Parse("Grey");
-                    }
-                    else
-                    {
-                        r.Background = Color.Parse("Black");
-                    }
-                    MainGrid.Add(r, colNum, rowNum);
-                }
-            }
-
-
-
         }
 
-        // create each Stacklayout for each card in the database and add it to the grid
+        /// <summary>
+        /// Creates each Stacklayout for each card in the database and add it to the grid
+        /// </summary>
         // NOTE: constant individual database querying, could be an issue for large amounts of cards
         public void PopulateGrid()
         {
+            MainGrid.Children.Clear();
+
             int cardCount = DAO.GetCardCount();
 
             int gridRowPos = 0;
@@ -110,10 +93,23 @@ namespace TCG_Manager
 
             for (int i = 1; i < cardCount + 1; i++)
             {
-                Card card = DAO.GetCardById(i);
+                //Color the grid cell
+                Rectangle r = new Rectangle();
+                if ((gridColumnPos + gridRowPos) % 2 == 0)
+                {
+                    r.Background = Color.Parse("Grey");
+                }
+                else
+                {
+                    r.Background = Color.Parse("Black");
+                }
+                MainGrid.Add(r, gridColumnPos, gridRowPos);
 
+                //get the card and create the stack and add it to the grid
+                Card card = DAO.GetCardById(i);
                 MainGrid.Add(CreateCardStack(card), gridColumnPos, gridRowPos);
 
+                //change the column and/or row to add a card stack to
                 gridColumnPos++;
                 if (gridColumnPos == COLUMN_COUNT)
                 {
@@ -123,6 +119,11 @@ namespace TCG_Manager
             }
         }
 
+        /// <summary>
+        /// Return a StackLayout containing the data of the given card
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
         public StackLayout CreateCardStack(Card card)
         {
             StackLayout layout = new StackLayout();
@@ -137,6 +138,7 @@ namespace TCG_Manager
             ImageButton imageButton = new ImageButton();
             imageButton.Source = card.ImageURI;
             imageButton.MaximumHeightRequest = 150;
+            // TODO: Add a page for detailed card data
             //imageButton.Clicked
             layout.Children.Add(imageButton);
 
