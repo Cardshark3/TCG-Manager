@@ -17,11 +17,16 @@ namespace TCG_Manager.Extractors
 
         public PriceChartingExtractor()
         {
-            alternateListings.Add("completed-auctions-used");
-            alternateListings.Add("completed-auctions-cib");
-            alternateListings.Add("completed-auctions-new");
-            alternateListings.Add("completed-auctions-graded");
-            alternateListings.Add("completed-auctions-manual-only");
+            //alternateListings.Add("completed-auctions-used");
+            //alternateListings.Add("completed-auctions-cib");
+            //alternateListings.Add("completed-auctions-new");
+            //alternateListings.Add("completed-auctions-graded");
+            //alternateListings.Add("completed-auctions-manual-only");
+        }
+
+        private string BuildURL(Card card)
+        {
+            return $"{baseUrl}-{card.Pack.Replace(" ", "-").ToLower()}/{card.Name.Replace(" ", "-").ToLower()}-{card.CardID}";
         }
 
 
@@ -29,7 +34,7 @@ namespace TCG_Manager.Extractors
         {
             string URI = "";
 
-            string builtUrl = $"{baseUrl}-{card.Pack.Replace(" ", "-").ToLower()}/{card.Name.Replace(" ", "-").ToLower()}-{card.CardID}";
+            string builtUrl = BuildURL(card);
 
             //create http client and load the built url
             HttpClient client = new HttpClient();
@@ -56,6 +61,45 @@ namespace TCG_Manager.Extractors
         public override bool VerifyCard(Card card)
         {
             throw new NotImplementedException();
+        }
+
+        public override ExtractedData Extract(Card card)
+        {
+            ExtractedData data = new ExtractedData();
+
+            string builtURL = BuildURL(card);
+
+            HttpClient client = new HttpClient();
+
+            string http = client.GetStringAsync(builtURL).Result;
+
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(http);
+
+            string tableDataID = "full-prices";
+
+            HtmlNode tableNode = doc.DocumentNode.SelectSingleNode($"//div[@id='{tableDataID}']");
+
+            foreach (HtmlNode row in tableNode.SelectNodes(".//tr"))
+            {
+                string key = "";
+                string value = "";
+                foreach (HtmlNode cell in row.SelectNodes(".//td"))
+                {
+                    if (cell.GetClasses().Count() != 0)
+                    {
+                        value = cell.InnerText;
+                    }
+                    else
+                    {
+                        key = cell.InnerText;
+                    }
+                }
+
+                data.AddGradePrice(key, value);
+            }
+
+            return data;
         }
     }
 }

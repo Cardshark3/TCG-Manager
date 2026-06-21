@@ -4,11 +4,22 @@
              x:Class="TCG_Manager.Views.CardDetailsPage"
              Title="CardDetailsPage"
              Shell.NavBarIsVisible="False">
-    
-    <VerticalStackLayout HorizontalOptions="Center">
-        <Image x:Name="CardImage" HeightRequest="400"></Image>
-        <Label x:Name="CardName"></Label>
-        <Label x:Name="CardPack"></Label>
-        <Label x:Name="CardAmount"></Label>
-    </VerticalStackLayout>
+
+    <ScrollView>
+        <VerticalStackLayout HorizontalOptions="Center">
+            <Image x:Name="CardImage" HeightRequest="350" HorizontalOptions="Center" Margin="0,30,0,0" ></Image>
+            <Label x:Name="CardName" HorizontalOptions="Center" FontSize="Large" Margin="0,20,0,0"></Label>
+            <Label x:Name="CardPack" HorizontalOptions="Center" FontSize="Medium" Margin="0,10,0,0"></Label>
+            <Label x:Name="CardAmount" HorizontalOptions="Center" FontSize="Medium" Margin="0,10,0,0"></Label>
+            <Grid x:Name="AveragePriceGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

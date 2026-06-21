@@ -12,5 +12,7 @@ namespace TCG_Manager.Extractors
         public abstract bool VerifyCard(Card card);
 
         public abstract string GetImage(Card card);
+
+        public abstract ExtractedData Extract(Card card);
     }
 }
