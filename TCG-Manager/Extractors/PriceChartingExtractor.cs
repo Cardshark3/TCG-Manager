@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using TCG_Manager.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TCG_Manager.Extractors
 {
