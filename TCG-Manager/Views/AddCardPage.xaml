@@ -4,7 +4,7 @@
              x:Class="TCG_Manager.Views.AddCardPage">
 
     <VerticalStackLayout>
-        <Grid>
+        <Grid HorizontalOptions="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"></ColumnDefinition>
                 <ColumnDefinition Width="100"></ColumnDefinition>
@@ -34,6 +34,9 @@
             <Entry Grid.Column="1" Grid.Row="4" x:Name="AmountInput"></Entry>
         </Grid>
 
-        <Button Clicked="AddButton_Clicked"></Button>
+        <Button Clicked="AddButton_Clicked" WidthRequest="200" Text="Add Card"></Button>
+
+        <Label x:Name="ErrorLabel" WidthRequest="200" TextColor="Red"></Label>
+        
     </VerticalStackLayout>
 </ContentPage>

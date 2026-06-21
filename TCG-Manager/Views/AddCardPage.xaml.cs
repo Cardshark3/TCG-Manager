@@ -20,9 +20,30 @@ public partial class AddCardPage : ContentPage
         string pack = PackInput.Text;
         string cardID = IDInput.Text;
         bool isPromo = IsPromoCheckbox.IsChecked;
-        int Amount = int.Parse(AmountInput.Text);
+        int amount = 0;
 
-        Card card = new Card(name, pack, cardID, isPromo, Amount, "");
+        try
+        {
+            amount = int.Parse(AmountInput.Text);
+        }catch
+        {
+            ErrorLabel.Text = "Amount must be a number.";
+            return;
+        }
+
+        if(amount <= 0)
+        {
+            ErrorLabel.Text = "The amount must be at least one.";
+            return;
+        }
+
+        if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(pack) || string.IsNullOrEmpty(cardID))
+        {
+            ErrorLabel.Text = "Please make sure all fields are filled.";
+            return;
+        }
+
+        Card card = new Card(name, pack, cardID, isPromo, amount, "");
 
         string image = extractor.GetImage(card);
 
