@@ -1,6 +1,6 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
 using TCG_Manager.Models;
-using static SQLite.TableMapping;
+using TCG_Manager.Views;
 
 namespace TCG_Manager
 {
@@ -10,7 +10,9 @@ namespace TCG_Manager
 
         bool initalised = false;
 
-        int COLUMN_COUNT = 10;
+        //Amount of column on screen, is calculated for smaller screen
+        int collumnCount = 10;
+        int minCollumnWidth = 170;
 
         GridLength GridWidth = new GridLength(200);
         GridLength GridHeight = new GridLength(300);
@@ -29,7 +31,10 @@ namespace TCG_Manager
             //NOTE: could be used to dynamicly resize the grid on size change
             if (initalised == false)
             {
-                GridWidth = new GridLength(width / COLUMN_COUNT);
+
+                collumnCount = (int)width / minCollumnWidth;
+
+                GridWidth = new GridLength(width / collumnCount);
                 GridHeight = new GridLength(GridWidth.Value * 1.5);
                 InitalizeGrid();
                 PopulateGrid();
@@ -58,17 +63,17 @@ namespace TCG_Manager
             int rowCount = 0;
 
             // check for a remainder comparing the amount of cards to the column count
-            if (cardCount % COLUMN_COUNT == 0)
+            if (cardCount % collumnCount == 0)
             {
-                rowCount = cardCount / COLUMN_COUNT;
+                rowCount = cardCount / collumnCount;
             }
             // if there is a remainder add an extra row 
             else
             {
-                rowCount = cardCount / COLUMN_COUNT + 1;
+                rowCount = cardCount / collumnCount + 1;
             }
 
-            for (int i = 0; i < COLUMN_COUNT; i++) 
+            for (int i = 0; i < collumnCount; i++) 
             {
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition(GridWidth));
             }
@@ -111,7 +116,7 @@ namespace TCG_Manager
 
                 //change the column and/or row to add a card stack to
                 gridColumnPos++;
-                if (gridColumnPos == COLUMN_COUNT)
+                if (gridColumnPos == collumnCount)
                 {
                     gridColumnPos = 0;
                     gridRowPos++;
@@ -138,8 +143,7 @@ namespace TCG_Manager
             ImageButton imageButton = new ImageButton();
             imageButton.Source = card.ImageURI;
             imageButton.MaximumHeightRequest = 150;
-            // TODO: Add a page for detailed card data
-            //imageButton.Clicked
+            imageButton.Clicked += delegate { OpenCardPage(card); };
             layout.Children.Add(imageButton);
 
             Label packLabel = new Label();
@@ -153,6 +157,11 @@ namespace TCG_Manager
             layout.Children.Add(amountLable);
 
             return layout;
+        }
+
+        void OpenCardPage(Card card)
+        {
+            Navigation.PushAsync(new CardDetailsPage(card));
         }
     }
 }
