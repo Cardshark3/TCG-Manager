@@ -52,7 +52,7 @@ namespace TCG_Manager
         }
         public void RemoveCard(int id) 
         {
-            database.DeleteAsync(id).Wait();
+            database.DeleteAsync<Card>(id).Wait();
         }
         public Card GetCardById(int id) 
         {
@@ -61,6 +61,11 @@ namespace TCG_Manager
         public int GetCardCount()
         {
             return database.Table<Card>().CountAsync().Result;
+        }
+
+        public void SetCardAmount(int id, int newAmount)
+        {
+            database.ExecuteAsync("UPDATE Card SET Amount = ? WHERE ID = ?", newAmount, id).Wait();
         }
 
     }

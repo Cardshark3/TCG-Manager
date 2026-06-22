@@ -8,6 +8,7 @@ public partial class CardDetailsPage : ContentPage
 	Card currentCard;
 
 	CardExtractor extractor = new PriceChartingExtractor();
+    TCGManagerDAO DAO = new TCGManagerDAO();
 
 	public CardDetailsPage(Card card)
 	{
@@ -38,5 +39,39 @@ public partial class CardDetailsPage : ContentPage
 
             counter++;
         }
+    }
+
+    private void UpdateCard(int id)
+    {
+        currentCard = DAO.GetCardById(id);
+    }
+
+    private void DeleteButton_Clicked(object sender, EventArgs e)
+    {
+        ConfirmDeleteStack.IsVisible = !ConfirmDeleteStack.IsVisible;
+    }
+    private void ConfirmDeleteButton_Clicked(object sender, EventArgs e)
+    {
+        DAO.RemoveCard(currentCard.Id);
+    }
+
+    private void decrementButton_Clicked(object sender, EventArgs e)
+    {
+        if (currentCard.Amount <= 1)
+        {
+            DeleteButton_Clicked(sender, e);
+            return;
+        }
+
+        DAO.SetCardAmount(currentCard.Id, currentCard.Amount - 1);
+        UpdateCard(currentCard.Id);
+        CardAmount.Text = currentCard.Amount.ToString();
+    }
+
+    private void incrementButton_Clicked(object sender, EventArgs e)
+    {
+        DAO.SetCardAmount(currentCard.Id, currentCard.Amount + 1);
+        UpdateCard(currentCard.Id);
+        CardAmount.Text = currentCard.Amount.ToString();
     }
 }
