@@ -42,11 +42,13 @@ public partial class CardDetailsPage : ContentPage
         ExtractedData data = extractor.Extract(currentCard);
         Dictionary<string, string> GradePrices = data.GetGradePrices();
 
+        for(int i = 0;  i < columnCount; i++)
+            AveragePriceGrid.AddColumnDefinition(new ColumnDefinition(columnWidth));
+
         int column = 0;
         int rowOffset = 0;
         foreach (var k in data.GetGradePrices().Keys)
         {
-            AveragePriceGrid.AddColumnDefinition(new ColumnDefinition(columnWidth));
             Label key = new Label();
             Thickness margin = new Thickness(5, 0, 5, 0);
             key.Margin = margin;
