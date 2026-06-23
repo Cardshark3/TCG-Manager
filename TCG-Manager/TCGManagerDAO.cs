@@ -58,6 +58,10 @@ namespace TCG_Manager
         {
             return database.FindAsync<Card>(id).Result;
         }
+        public List<Card> GetAllCards()
+        {
+            return database.Table<Card>().ToListAsync().Result;
+        }
         public int GetCardCount()
         {
             return database.Table<Card>().CountAsync().Result;

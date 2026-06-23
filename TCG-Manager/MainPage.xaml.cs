@@ -86,17 +86,18 @@ namespace TCG_Manager
         /// <summary>
         /// Creates each Stacklayout for each card in the database and add it to the grid
         /// </summary>
-        // NOTE: constant individual database querying, could be an issue for large amounts of cards
+        // NOTE: Gets all cards from database at once, could be an issue for large amounts of cards
         public void PopulateGrid()
         {
             MainGrid.Children.Clear();
 
-            int cardCount = DAO.GetCardCount();
 
             int gridRowPos = 0;
             int gridColumnPos = 0;
 
-            for (int i = 1; i < cardCount + 1; i++)
+            List<Card> cards = DAO.GetAllCards();
+
+            foreach(Card card in cards)
             {
                 //Color the grid cell
                 Rectangle r = new Rectangle();
@@ -110,8 +111,6 @@ namespace TCG_Manager
                 }
                 MainGrid.Add(r, gridColumnPos, gridRowPos);
 
-                //get the card and create the stack and add it to the grid
-                Card card = DAO.GetCardById(i);
                 MainGrid.Add(CreateCardStack(card), gridColumnPos, gridRowPos);
 
                 //change the column and/or row to add a card stack to
