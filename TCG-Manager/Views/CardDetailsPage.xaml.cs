@@ -5,6 +5,10 @@ namespace TCG_Manager.Views;
 
 public partial class CardDetailsPage : ContentPage
 {
+    int MAX_COLUMN_COUNT = 5;
+    int columnCount = 0;
+    double columnWidth = 100;
+
 	Card currentCard;
 
 	CardExtractor extractor = new PriceChartingExtractor();
@@ -21,25 +25,37 @@ public partial class CardDetailsPage : ContentPage
 		CardPack.Text = currentCard.Pack;
 		CardAmount.Text = currentCard.Amount.ToString();
 
-		ExtractedData data = extractor.Extract(card);
-        Dictionary<string, string> GradePrices = data.GetGradePrices();
+    }
 
+    protected override void OnSizeAllocated(double width, double height)
+    {
+        base.OnSizeAllocated(width, height);
+        // calculate how many column the screen can reasonably fit
+        columnCount = (int)(width / columnWidth);
+        if(columnCount > MAX_COLUMN_COUNT)
+            columnCount = MAX_COLUMN_COUNT;
+        // set the width request for the AveragePriceGrid here so the grid will be centerd on screen
+        AveragePriceGrid.WidthRequest = columnCount * columnWidth;
+
+        // get the data for the card to be displayed on the table
+        // do this here as the doing it elsware will break formatting for the grid
+        ExtractedData data = extractor.Extract(currentCard);
+        Dictionary<string, string> GradePrices = data.GetGradePrices();
 
         int column = 0;
         int rowOffset = 0;
-        GridLength width = 100;
         foreach (var k in data.GetGradePrices().Keys)
         {
-            AveragePriceGrid.AddColumnDefinition(new ColumnDefinition(width));
+            AveragePriceGrid.AddColumnDefinition(new ColumnDefinition(columnWidth));
             Label key = new Label();
-            Thickness margin = new Thickness(5, 10, 5, 0);
+            Thickness margin = new Thickness(5, 0, 5, 0);
             key.Margin = margin;
             key.BackgroundColor = new Color(0.75f);
             key.TextColor = new Color(0, 0, 0);
 
             Label value = new Label();
             value.Margin = margin;
-            value.BackgroundColor = new Color(0.25f);
+            value.BackgroundColor = new Color(0.50f);
             value.TextColor = new Color(0, 0, 0);
 
             key.Text = k;
@@ -49,7 +65,7 @@ public partial class CardDetailsPage : ContentPage
 
             column++;
 
-            if (column == 5)
+            if (column == columnCount)
             {
                 column = 0;
                 AveragePriceGrid.AddRowDefinition(new RowDefinition());
@@ -57,8 +73,6 @@ public partial class CardDetailsPage : ContentPage
                 rowOffset += 2;
             }
         }
-
-
     }
 
     private void UpdateCard(int id)

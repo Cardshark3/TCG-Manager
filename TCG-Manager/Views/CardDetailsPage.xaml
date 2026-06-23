@@ -6,17 +6,30 @@
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
-        <VerticalStackLayout HorizontalOptions="Center">
-            <Image x:Name="CardImage" HeightRequest="350" HorizontalOptions="Center" Margin="0,30,0,0" ></Image>
-            <Label x:Name="CardName" HorizontalOptions="Center" FontSize="Large" Margin="0,20,0,0"></Label>
-            <Label x:Name="CardPack" HorizontalOptions="Center" FontSize="Medium" Margin="0,10,0,0"></Label>
-            <HorizontalStackLayout HorizontalOptions="Center">
-                <Button x:Name="decrementButton" Clicked="decrementButton_Clicked" Text="-"></Button>
-                <Label x:Name="CardAmount" HorizontalOptions="Center" FontSize="Medium" Margin="0,10,0,0" MinimumWidthRequest="100" HorizontalTextAlignment="Center"></Label>
-                <Button x:Name="incrementButton" Clicked="incrementButton_Clicked" Text="+"></Button>
-            </HorizontalStackLayout>
-            
-            <Grid x:Name="AveragePriceGrid" HorizontalOptions="Center">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <VerticalStackLayout HorizontalOptions="Center" Grid.Row="0" Grid.Column="0">
+                <Image x:Name="CardImage" HeightRequest="350" HorizontalOptions="Center" Margin="0,30,0,0" ></Image>
+                <Label x:Name="CardName" HorizontalOptions="Center" FontSize="Large" Margin="0,20,0,0"></Label>
+                <Label x:Name="CardPack" HorizontalOptions="Center" FontSize="Medium" Margin="0,10,0,0"></Label>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Button x:Name="decrementButton" Clicked="decrementButton_Clicked" Text="-"></Button>
+                    <Label x:Name="CardAmount" HorizontalOptions="Center" FontSize="Medium" Margin="0,10,0,0" MinimumWidthRequest="100" HorizontalTextAlignment="Center"></Label>
+                    <Button x:Name="incrementButton" Clicked="incrementButton_Clicked" Text="+"></Button>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <Grid x:Name="AveragePriceGrid" HorizontalOptions="Center" Grid.Column="0" Grid.Row="1" WidthRequest="500">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
@@ -25,12 +38,15 @@
                 <Grid.ColumnDefinitions>
                 </Grid.ColumnDefinitions>
             </Grid>
-            
-            <Button x:Name="DeleteCardButton" Clicked="DeleteButton_Clicked" Text="Delete card" Margin="0,10,0,0"></Button>
-            <HorizontalStackLayout x:Name="ConfirmDeleteStack" IsVisible="False" Margin="0,10,0,0">
+
+            <Button x:Name="DeleteCardButton" Clicked="DeleteButton_Clicked" Text="Delete card" Margin="0,10,0,0" WidthRequest="200" HeightRequest="50" Grid.Column="0" Grid.Row="2"></Button>
+            <HorizontalStackLayout x:Name="ConfirmDeleteStack" IsVisible="False" Margin="0,10,0,0"  Grid.Column="0" Grid.Row="3" HorizontalOptions="Center">
                 <Label Text="Are you sure you want to delete this card?" TextColor="Red" FontSize="Medium" LineBreakMode="WordWrap" MaximumWidthRequest="300" Margin="0,0,15,0" ></Label>
                 <Button x:Name="ConfirmDeleteCardButton" Clicked="ConfirmDeleteButton_Clicked" Text="Confirm" WidthRequest="100"></Button>
             </HorizontalStackLayout>
-        </VerticalStackLayout>
+
+        </Grid>
+        
+  
     </ScrollView>
 </ContentPage>
